@@ -8,8 +8,4 @@ import org.junit.Test;
 
 public class MainTest {
 
-    @Test
-    public void evualteExpression(){
-        assertEquals("World","World");
-    }
 }
