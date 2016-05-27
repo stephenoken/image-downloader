@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ImageDownloader.iml" filepath="$PROJECT_DIR$/.idea/modules/ImageDownloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ImageDownloader_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ImageDownloader_main.iml" group="ImageDownloader" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ImageDownloader_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ImageDownloader_test.iml" group="ImageDownloader" />
+    </modules>
+  </component>
+</project>
