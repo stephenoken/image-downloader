@@ -1,8 +1,11 @@
 package com.paser;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
@@ -22,22 +25,29 @@ public class ImageDownloaderTest {
 
     @Test
     public void downloadImages(){
-        File f = new File("./test/crosscountryrunning/avatar_284cfbb01f43_128.png");
+        File f1 = new File("./test-dir/crosscountryrunning/avatar_284cfbb01f43_128.png");
+        File f2 = new File("./test-dir/crosscountryrunning2/avatar_284cfbb01f43_128.png");
+//        File f3 = new File("./avatar_284cfbb01f43_128.png");
         ImageDownloader downloader  = new ImageDownloader();
-        downloader.downloadsImages(downloader.getImgUrlsFromSite(this.samplePage),"test");
-        assertTrue(f.exists());
+        downloader.downloadsImages(downloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning");
+        downloader.downloadsImages(downloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning2/");
+//        downloader.downloadsImages(downloader.getImgUrlsFromSite(this.samplePage),null);
+        assertTrue(f1.exists());
+        assertTrue(f2.exists());
+//        assertTrue(f3.exists());
     }
 
+    @After
+    public void removeTestDir(){
+        try{
+            FileUtils.deleteDirectory(new File("./test-dir"));
+        }catch (IOException e){
+            System.out.println("Folder not found");
+        }
+    }
     @Test
     public void parseFileName(){
-        assertEquals("/avatar_284cfbb01f43_128.png",
+        assertEquals("avatar_284cfbb01f43_128.png",
                 new ImageDownloader().getFileName(this.imgUrl));
-    }
-
-    @Test
-    public void createDirectory(){
-        String path1 = "./sample-dir/images";
-        File f1 = new File(path1);
-        assertTrue(f1.isDirectory());
     }
 }

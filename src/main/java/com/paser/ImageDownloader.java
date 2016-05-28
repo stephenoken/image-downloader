@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -42,12 +43,15 @@ public class ImageDownloader {
     }
 
     public void downloadsImages(List<String> imgUrlsFromSite, String destination){
+
+        String dest = (destination != null)?
+                (destination.endsWith("/"))? destination : destination + "/" : "./";
         try{
-            new File(destination+"/").mkdirs();
+            new File(dest).mkdirs();
             for (String link:imgUrlsFromSite) {
                 final URL url = new URL(link);
                 InputStream is = url.openStream();
-                OutputStream os = new FileOutputStream(this.getFileName(link));
+                OutputStream os = new FileOutputStream(dest+this.getFileName(link));
 
                 byte[] b = new byte[2048];
                 int length;
