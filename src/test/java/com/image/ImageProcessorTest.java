@@ -23,7 +23,7 @@ public class ImageProcessorTest {
             BufferedImage img1 = ImageIO.read(new File("./test-images/img1.jpg"));
             BufferedImage img2 = ImageIO.read(new File("./test-images/img2.jpg"));
             BufferedImage img3 = ImageIO.read(new File("./test-images/img3.jpg"));
-    //        processor.getAspectRatio(100)
+
             Dimension img1Small = new Dimension(100,66);
             Dimension img1Medium = new Dimension(220,146);
             Dimension img1Large = new Dimension(320,212);
@@ -49,5 +49,34 @@ public class ImageProcessorTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void generateScaledImages(){
+        try{
+            ImageProcessor processor = new ImageProcessor();
+            File file1 = new File("./test-images/img1.jpg");
+            File file2 = new File("./test-images/img2.jpg");
+            File file3 = new File("./test-images/img3.jpg");
+
+            processor.generateScaledImages(file1);
+//            processor.generateScaledImages(file2);
+//            processor.generateScaledImages(file3);
+
+            File smallDirectory = new File(file1.getParent()+"/small/");
+            File mediumDirectory = new File(file1.getParent()+"/medium/");
+            File largeDirectory = new File(file1.getParent()+"/large/");
+
+            assertTrue(smallDirectory.exists() && smallDirectory.isDirectory());
+            assertTrue(smallDirectory.exists() && mediumDirectory.isDirectory());
+            assertTrue(smallDirectory.exists() && largeDirectory.isDirectory());
+
+            assertTrue(new File("./test-images/small/img1.jpg").exists());
+            assertTrue(new File("./test-images/small/img1.png").exists());
+            assertTrue(new File("./test-images/small/img1.gif").exists());
+        } catch(IOException e){
+         e.printStackTrace();
+        }
+
     }
 }

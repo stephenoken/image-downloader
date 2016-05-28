@@ -1,5 +1,6 @@
 package com.paser;
 
+import com.utils.ImageUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,7 +17,7 @@ import java.util.Optional;
  * Created by stephenokennedy on 27/05/2016.
  */
 
-public class ImageDownloader {
+public class ImageDownloader extends ImageUtils {
 
     /*
         Scrapes Website for images for pngs, gifs and jpegs
@@ -66,10 +67,6 @@ public class ImageDownloader {
             System.err.println(e);
         }
 
-    }
-
-    public String getFileName(String imgUrl){
-        return imgUrl.substring(imgUrl.lastIndexOf("/")+1,imgUrl.length());
     }
 
 }
