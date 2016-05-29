@@ -16,3 +16,5 @@ test-dir
 test-images/small
 test-images/medium
 test-images/large
+
+.gradle
