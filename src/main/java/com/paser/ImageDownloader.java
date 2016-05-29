@@ -13,6 +13,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -46,32 +48,35 @@ public class ImageDownloader {
     }
 
     public static void downloadsImages(List<String> imgUrlsFromSite, String destination){
-
         String dest = (destination != null)?
                 (destination.endsWith("/"))? destination : destination + "/" : "./";
-        try{
-            new File(dest).mkdirs();
-            for (String link:imgUrlsFromSite) {
-                String fileDir = dest+getFileName(link);
-                final URL url = new URL(link);
-                InputStream is = url.openStream();
-                if (!ImageDownloader.compare(fileDir,is)) {
-                    OutputStream os = new FileOutputStream(fileDir,false);
 
-                    byte[] b = new byte[2048];
-                    int length;
-                    while ((length = is.read(b)) != -1) {
-                        os.write(b, 0, length);
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        new File(dest).mkdirs();
+        for (String link:imgUrlsFromSite) {
+            executorService.submit(() -> {
+                try {
+                    String fileDir = dest + getFileName(link);
+                    final URL url = new URL(link);
+                    InputStream is = url.openStream();
+                    if (!ImageDownloader.compare(fileDir, is)) {
+                        OutputStream os = new FileOutputStream(fileDir, false);
+
+                        byte[] b = new byte[2048];
+                        int length;
+                        while ((length = is.read(b)) != -1) {
+                            os.write(b, 0, length);
+                        }
+                        os.close();
                     }
-                    os.close();
+
+                    is.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                is.close();
-            }
-        } catch(Exception e){
-            System.err.println(e);
+            });
         }
-
+        executorService.shutdown();
     }
 
     public static String getFileName(String imgUrl){
