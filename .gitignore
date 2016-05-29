@@ -18,3 +18,4 @@ test-images/medium
 test-images/large
 
 .gradle
+build
