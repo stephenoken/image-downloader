@@ -2,9 +2,11 @@ package com.paser;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
@@ -44,9 +46,25 @@ public class ImageDownloaderTest {
             System.out.println("Folder not found");
         }
     }
+
     @Test
     public void parseFileName(){
         assertEquals("avatar_284cfbb01f43_128.png",
                 new ImageDownloader().getFileName(this.imgUrl));
+    }
+
+    @Test
+    public void areImagesTheSame(){
+        try{
+            String file1 = "./test-images/img1.jpg";
+            String file2 = "./test-images/img1.jpg";
+            String file3 = "./test-images/img2.jpg";
+            String file4 = "./test-images/img-doesnt-exist.png";
+            assertTrue(ImageDownloader.compare(file1,new FileInputStream(file2)));
+            assertFalse(ImageDownloader.compare(file1,new FileInputStream(file3)));
+            assertFalse(ImageDownloader.compare(file4,new FileInputStream(file3)));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

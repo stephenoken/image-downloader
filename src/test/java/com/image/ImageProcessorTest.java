@@ -101,6 +101,11 @@ public class ImageProcessorTest {
         assertTrue(new File("./test-images/large/img3.png").exists());
     }
 
+    @Test
+    public void removeVerySmallImages(){
+
+    }
+    
     @After
     public void removeTestDirs(){
         try{
