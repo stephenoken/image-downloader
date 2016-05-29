@@ -25,6 +25,7 @@ public class ImageDownloaderTest {
         assertTrue(downloader.getImgUrlsFromSite(null).isEmpty());
     }
 
+    //Note that this test runs in sync and is likely to fail are images are downloaded concurrently
     @Test
     public void downloadImages(){
         File f1 = new File("./test-dir/crosscountryrunning/avatar_284cfbb01f43_128.png");
