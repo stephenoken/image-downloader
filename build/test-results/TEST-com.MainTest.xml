@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.MainTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2016-05-27T10:55:25" hostname="Stephens-MBP-3" time="0.001">
-  <properties/>
-  <testcase name="evualteExpression" classname="com.MainTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
