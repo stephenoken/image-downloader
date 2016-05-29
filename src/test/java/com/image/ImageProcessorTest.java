@@ -105,7 +105,7 @@ public class ImageProcessorTest {
     public void removeVerySmallImages(){
 
     }
-    
+
     @After
     public void removeTestDirs(){
         try{

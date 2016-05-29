@@ -38,6 +38,10 @@ public class ImageDownloaderTest {
 //        assertTrue(f3.exists());
     }
 
+    /*
+    To test whether the program doesn't download the same image twice comment out this
+    after test code block and check the last created/modified in finder or windows explorer
+     */
     @After
     public void removeTestDir(){
         try{

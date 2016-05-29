@@ -12,9 +12,7 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -58,7 +56,7 @@ public class ImageDownloader {
                 final URL url = new URL(link);
                 InputStream is = url.openStream();
                 if (!ImageDownloader.compare(fileDir,is)) {
-                    OutputStream os = new FileOutputStream(fileDir);
+                    OutputStream os = new FileOutputStream(fileDir,false);
 
                     byte[] b = new byte[2048];
                     int length;
@@ -89,7 +87,7 @@ public class ImageDownloader {
 
         InputStream hashedStream1 = new DigestInputStream(originalStream,md1);
         InputStream hashedStream2 = new DigestInputStream(stream2,md2);
-
         return IOUtils.contentEquals(hashedStream1,hashedStream2);
+
     }
 }
