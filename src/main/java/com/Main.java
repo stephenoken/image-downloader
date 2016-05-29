@@ -1,14 +1,10 @@
 package com;
 
-import com.image.ImageProcessor;
+
+import com.google.common.base.Stopwatch;
 import com.paser.ImageDownloader;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
-
-import static com.paser.ImageDownloader.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by stephenokennedy on 27/05/2016.
@@ -19,20 +15,9 @@ public class Main {
         if (args.length != 2){
             System.err.println("Missing Arguments Url and directory");
         }
+        final Stopwatch stopwatch = Stopwatch.createStarted();
         ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(args[0]),args[1]);
-        getFilesFromDirectory(args[1]);
-    }
-
-    public static void getFilesFromDirectory(String directory){
-        File folder = new File(directory);
-        File[] listOfFiles = folder.listFiles();
-        try {
-            for (File f:listOfFiles) {
-                if (f.exists()&& f.isFile());
-                ImageProcessor.generateScaledImages(f);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        final long elapsedMillis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        System.out.println("CPU time " + elapsedMillis +" miliseconds.");
     }
 }

@@ -1,5 +1,6 @@
 package com.paser;
 
+import com.image.ImageProcessor;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -68,6 +69,7 @@ public class ImageDownloader {
                             os.write(b, 0, length);
                         }
                         os.close();
+                        ImageProcessor.generateScaledImages(new File(fileDir));
                     }
 
                     is.close();
