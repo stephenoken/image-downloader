@@ -42,14 +42,14 @@ public class ImageDownloaderTest {
     To test whether the program doesn't download the same image twice comment out this
     after test code block and check the last created/modified in finder or windows explorer
      */
-    @After
-    public void removeTestDir(){
-        try{
-            FileUtils.deleteDirectory(new File("./test-dir"));
-        }catch (IOException e){
-            System.out.println("Folder not found");
-        }
-    }
+//    @After
+//    public void removeTestDir(){
+//        try{
+//            FileUtils.deleteDirectory(new File("./test-dir"));
+//        }catch (IOException e){
+//            System.out.println("Folder not found");
+//        }
+//    }
 
     @Test
     public void parseFileName(){
