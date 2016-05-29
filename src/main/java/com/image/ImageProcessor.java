@@ -41,30 +41,35 @@ public class ImageProcessor{
         BufferedImage mImg = resizeImage(ImageIO.read(file),ImageSize.MEDIUM.getValue());
         BufferedImage lImg = resizeImage(ImageIO.read(file),ImageSize.LARGE.getValue());
 
-        // TODO: 28/05/2016 Implement threading
-        generateImages(file, smallDirPath, sImg);
-        generateImages(file, mediumDirPath, mImg);
-        generateImages(file, largeDirPath, lImg);
+        new Thread(()->{generateImages(file, smallDirPath, sImg); }).start();
+        new Thread(()->{generateImages(file, mediumDirPath, mImg);}).start();
+        new Thread(()->{generateImages(file, largeDirPath, lImg);}).start();
 
 
     }
 
-    private static void generateImages(File file, String smallDirPath, BufferedImage sImg) throws IOException {
+    private static void generateImages(File file, String smallDirPath, BufferedImage sImg) {
         String fileName = file.getName().substring(0,file.getName().indexOf(".")+1);
-
         //Ensures that we use RGB instead of RGBA on the  png to jpeg conversion
-        if (file.getName().toLowerCase().endsWith(".png")) {
-            BufferedImage jpgImage = new BufferedImage(sImg.getWidth(), sImg.getHeight(), BufferedImage.TYPE_INT_RGB);
-            jpgImage.createGraphics().drawImage(sImg,0,0,Color.white,null);
-            ImageIO.write(jpgImage, ImageTypes.JPG.toString(),
-                    new File(smallDirPath+fileName+ImageTypes.JPG));
-        }else{
-            ImageIO.write(sImg, ImageTypes.JPG.toString(),
-                    new File(smallDirPath+fileName+ImageTypes.JPG));
+        try{
+            if (file.getName().toLowerCase().endsWith(".png")) {
+
+                BufferedImage jpgImage = new BufferedImage(sImg.getWidth(), sImg.getHeight(),
+                        BufferedImage.TYPE_INT_RGB);
+
+                jpgImage.createGraphics().drawImage(sImg,0,0,Color.white,null);
+                ImageIO.write(jpgImage, ImageTypes.JPG.toString(),
+                        new File(smallDirPath+fileName+ImageTypes.JPG));
+            }else{
+                ImageIO.write(sImg, ImageTypes.JPG.toString(),
+                        new File(smallDirPath+fileName+ImageTypes.JPG));
+            }
+            ImageIO.write(sImg,ImageTypes.PNG.toString(),
+                    new File(smallDirPath+fileName+ImageTypes.PNG));
+            ImageIO.write(sImg,ImageTypes.GIF.toString(),
+                    new File(smallDirPath+fileName+ImageTypes.GIF));
+        } catch (IOException e){
+            e.printStackTrace();
         }
-        ImageIO.write(sImg,ImageTypes.PNG.toString(),
-                new File(smallDirPath+fileName+ImageTypes.PNG));
-        ImageIO.write(sImg,ImageTypes.GIF.toString(),
-                new File(smallDirPath+fileName+ImageTypes.GIF));
     }
 }
