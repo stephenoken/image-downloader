@@ -25,30 +25,26 @@ public class ImageDownloaderTest {
         assertTrue(downloader.getImgUrlsFromSite(null).isEmpty());
     }
 
-    //Note that this test runs in sync and is likely to fail are images are downloaded concurrently
+    /**
+     *  Note that this test runs in sync and is likely to fail are images are downloaded
+     *  concurrently.
+     *
+     *  The thread is put to sleep to ensure that programme can download the images
+     *
+     *  This test requires an internet connection 
+     */
     @Test
     public void downloadImages(){
-        File f1 = new File("./test-dir/crosscountryrunning/avatar_284cfbb01f43_128.png");
-        File f2 = new File("./test-dir/crosscountryrunning2/avatar_284cfbb01f43_128.png");
-//        File f3 = new File("./avatar_284cfbb01f43_128.png");
-        ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning");
-        ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning2/");
-//        ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),null);
-        assertTrue(f1.exists());
-        assertTrue(f2.exists());
-//        assertTrue(f3.exists());
-    }
-
-    /*
-    To test whether the program doesn't download the same image twice comment out this
-    after test code block and check the last created/modified in finder or windows explorer
-     */
-    @After
-    public void removeTestDir(){
-        try{
-            FileUtils.deleteDirectory(new File("./test-dir"));
-        }catch (IOException e){
-            System.out.println("Folder not found");
+        try {
+            File f1 = new File("./test-dir/crosscountryrunning/avatar_284cfbb01f43_128.png");
+            File f2 = new File("./test-dir/crosscountryrunning2/avatar_284cfbb01f43_128.png");
+            ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning");
+            ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning2/");
+            Thread.sleep(10000);
+            assertTrue(f1.exists());
+            assertTrue(f2.exists());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -92,5 +88,18 @@ public class ImageDownloaderTest {
         assertEquals(validImgUrl2,ImageDownloader.validateURL(webUrl1, imageUrl3));
         assertEquals(validImgUrl2,ImageDownloader.validateURL(webUrl2, imageUrl3));
         assertEquals(validImgUrl3,ImageDownloader.validateURL(webUrl3, imageUrl4));
+    }
+
+    /*
+    To test whether the program doesn't download the same image twice comment out this
+    after test code block and check the last created/modified in finder or windows explorer
+     */
+    @After
+    public void removeTestDir(){
+        try{
+            FileUtils.deleteDirectory(new File("./test-dir"));
+        }catch (IOException e){
+            System.out.println("Folder not found");
+        }
     }
 }

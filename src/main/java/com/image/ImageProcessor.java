@@ -36,10 +36,13 @@ public class ImageProcessor{
         new File(smallDirPath).mkdirs();
         new File(mediumDirPath).mkdirs();
         new File(largeDirPath).mkdirs();
+        BufferedImage image = ImageIO.read(file);
+        if (image.getWidth() <= 10 || image.getHeight() <= 10)
+            return;
 
-        BufferedImage sImg = resizeImage(ImageIO.read(file),ImageSize.SMALL.getValue());
-        BufferedImage mImg = resizeImage(ImageIO.read(file),ImageSize.MEDIUM.getValue());
-        BufferedImage lImg = resizeImage(ImageIO.read(file),ImageSize.LARGE.getValue());
+        BufferedImage sImg = resizeImage(image,ImageSize.SMALL.getValue());
+        BufferedImage mImg = resizeImage(image,ImageSize.MEDIUM.getValue());
+        BufferedImage lImg = resizeImage(image,ImageSize.LARGE.getValue());
 
         new Thread(()->{generateImages(file, smallDirPath, sImg); }).start();
         new Thread(()->{generateImages(file, mediumDirPath, mImg);}).start();
@@ -48,28 +51,36 @@ public class ImageProcessor{
 
     }
 
-    private static void generateImages(File file, String smallDirPath, BufferedImage sImg) {
+    private static void generateImages(File file, String directoryPath, BufferedImage image) {
         String fileName = file.getName().substring(0,file.getName().indexOf(".")+1);
         //Ensures that we use RGB instead of RGBA on the  png to jpeg conversion
         try{
-            if (file.getName().toLowerCase().endsWith(".png")) {
-
-                BufferedImage jpgImage = new BufferedImage(sImg.getWidth(), sImg.getHeight(),
-                        BufferedImage.TYPE_INT_RGB);
-
-                jpgImage.createGraphics().drawImage(sImg,0,0,Color.white,null);
-                ImageIO.write(jpgImage, ImageTypes.JPG.toString(),
-                        new File(smallDirPath+fileName+ImageTypes.JPG));
-            }else{
-                ImageIO.write(sImg, ImageTypes.JPG.toString(),
-                        new File(smallDirPath+fileName+ImageTypes.JPG));
-            }
-            ImageIO.write(sImg,ImageTypes.PNG.toString(),
-                    new File(smallDirPath+fileName+ImageTypes.PNG));
-            ImageIO.write(sImg,ImageTypes.GIF.toString(),
-                    new File(smallDirPath+fileName+ImageTypes.GIF));
+            ImageIO.write(getJPGFriendlyImage(file, image), ImageTypes.JPG.toString(),
+                    new File(directoryPath+fileName+ImageTypes.JPG));
+            ImageIO.write(image,ImageTypes.PNG.toString(),
+                    new File(directoryPath+fileName+ImageTypes.PNG));
+            ImageIO.write(image,ImageTypes.GIF.toString(),
+                    new File(directoryPath+fileName+ImageTypes.GIF));
         } catch (IOException e){
-            e.printStackTrace();
+            System.err.println(e.toString());
         }
     }
+
+    private static BufferedImage getJPGFriendlyImage(File file, BufferedImage image) {
+        if (fileIsPNG(file)) {
+
+            BufferedImage jpgImage = new BufferedImage(image.getWidth(), image.getHeight(),
+                    BufferedImage.TYPE_INT_RGB);
+
+            jpgImage.createGraphics().drawImage(image,0,0, Color.white,null);
+            return  jpgImage;
+        }else{
+            return image;
+        }
+    }
+
+    private static boolean fileIsPNG(File file) {
+        return file.getName().toLowerCase().endsWith(".png");
+    }
+
 }

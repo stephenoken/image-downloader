@@ -42,7 +42,7 @@ public class ImageDownloader {
                 imgUrls.add(url);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            System.err.println(e.toString());
         }
         return  imgUrls;
     }
@@ -79,7 +79,7 @@ public class ImageDownloader {
 
                     is.close();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.err.println(e.toString());
                 }
             });
         }
