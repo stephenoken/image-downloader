@@ -29,13 +29,13 @@ public class ImageDownloaderTest {
     public void downloadImages(){
         File f1 = new File("./test-dir/crosscountryrunning/avatar_284cfbb01f43_128.png");
         File f2 = new File("./test-dir/crosscountryrunning2/avatar_284cfbb01f43_128.png");
-//        File f3 = new File("./avatar_284cfbb01f43_128.png");
+        File f3 = new File("./test-dir/crosscountryrunning/small/avatar_284cfbb01f43_128.png");
         ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning");
         ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning2/");
 //        ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),null);
         assertTrue(f1.exists());
         assertTrue(f2.exists());
-//        assertTrue(f3.exists());
+        assertTrue(f3.exists());
     }
 
     /*
