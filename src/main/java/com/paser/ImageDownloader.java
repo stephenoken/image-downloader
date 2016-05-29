@@ -1,6 +1,5 @@
 package com.paser;
 
-import com.utils.ImageUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,14 +16,14 @@ import java.util.Optional;
  * Created by stephenokennedy on 27/05/2016.
  */
 
-public class ImageDownloader extends ImageUtils {
+public class ImageDownloader {
 
     /*
         Scrapes Website for images for pngs, gifs and jpegs
         @returns : A list of image urls
     */
-    public List<String> getImgUrlsFromSite(String website) {
-        ArrayList<String> imgUrls = new ArrayList();
+    public static List<String> getImgUrlsFromSite(String website) {
+        ArrayList<String> imgUrls = new ArrayList<>();
         try{
             Document doc = Jsoup.connect(website).get();
             Elements imageTags = doc.getElementsByTag("img");
@@ -39,11 +38,11 @@ public class ImageDownloader extends ImageUtils {
         return  imgUrls;
     }
 
-    private boolean isSupportedFormat(String url) {
+    private static boolean isSupportedFormat(String url) {
         return url.endsWith(".jpg") || url.endsWith(".JPEG") || url.endsWith(".png") || url.endsWith(".gif");
     }
 
-    public void downloadsImages(List<String> imgUrlsFromSite, String destination){
+    public static void downloadsImages(List<String> imgUrlsFromSite, String destination){
 
         String dest = (destination != null)?
                 (destination.endsWith("/"))? destination : destination + "/" : "./";
@@ -52,7 +51,7 @@ public class ImageDownloader extends ImageUtils {
             for (String link:imgUrlsFromSite) {
                 final URL url = new URL(link);
                 InputStream is = url.openStream();
-                OutputStream os = new FileOutputStream(dest+this.getFileName(link));
+                OutputStream os = new FileOutputStream(dest+getFileName(link));
 
                 byte[] b = new byte[2048];
                 int length;
@@ -67,6 +66,10 @@ public class ImageDownloader extends ImageUtils {
             System.err.println(e);
         }
 
+    }
+
+    public static String getFileName(String imgUrl){
+        return imgUrl.substring(imgUrl.lastIndexOf("/")+1,imgUrl.length());
     }
 
 }

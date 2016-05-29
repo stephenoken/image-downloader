@@ -1,5 +1,7 @@
 package com.image;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -60,23 +62,53 @@ public class ImageProcessorTest {
             File file3 = new File("./test-images/img3.jpg");
 
             processor.generateScaledImages(file1);
-//            processor.generateScaledImages(file2);
-//            processor.generateScaledImages(file3);
+            processor.generateScaledImages(file2);
+            processor.generateScaledImages(file3);
 
             File smallDirectory = new File(file1.getParent()+"/small/");
             File mediumDirectory = new File(file1.getParent()+"/medium/");
             File largeDirectory = new File(file1.getParent()+"/large/");
 
-            assertTrue(smallDirectory.exists() && smallDirectory.isDirectory());
-            assertTrue(smallDirectory.exists() && mediumDirectory.isDirectory());
-            assertTrue(smallDirectory.exists() && largeDirectory.isDirectory());
+            assertTrue(smallDirectory.isDirectory());
+            assertTrue(mediumDirectory.isDirectory());
+            assertTrue(largeDirectory.isDirectory());
 
-            assertTrue(new File("./test-images/small/img1.jpg").exists());
-            assertTrue(new File("./test-images/small/img1.png").exists());
-            assertTrue(new File("./test-images/small/img1.gif").exists());
+            imageGenerationTestCases();
+
         } catch(IOException e){
          e.printStackTrace();
         }
 
+    }
+
+    private void imageGenerationTestCases() {
+        assertTrue(new File("./test-images/small/img1.jpg").exists());
+        assertTrue(new File("./test-images/small/img1.png").exists());
+        assertTrue(new File("./test-images/small/img1.gif").exists());
+        assertTrue(new File("./test-images/small/img2.jpg").exists());
+        assertTrue(new File("./test-images/small/img3.png").exists());
+
+        assertTrue(new File("./test-images/medium/img1.jpg").exists());
+        assertTrue(new File("./test-images/medium/img1.png").exists());
+        assertTrue(new File("./test-images/medium/img1.gif").exists());
+        assertTrue(new File("./test-images/medium/img2.gif").exists());
+        assertTrue(new File("./test-images/medium/img3.png").exists());
+
+        assertTrue(new File("./test-images/large/img1.jpg").exists());
+        assertTrue(new File("./test-images/large/img1.png").exists());
+        assertTrue(new File("./test-images/large/img1.gif").exists());
+        assertTrue(new File("./test-images/large/img2.gif").exists());
+        assertTrue(new File("./test-images/large/img3.png").exists());
+    }
+
+    @After
+    public void removeTestDirs(){
+        try{
+            FileUtils.deleteDirectory(new File("./test-images/small"));
+            FileUtils.deleteDirectory(new File("./test-images/medium"));
+            FileUtils.deleteDirectory(new File("./test-images/large"));
+        }catch (IOException e){
+            System.out.println("Folder not found");
+        }
     }
 }
