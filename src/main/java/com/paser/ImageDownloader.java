@@ -6,9 +6,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import sun.net.util.URLUtil;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -31,15 +34,15 @@ public class ImageDownloader {
     public static List<String> getImgUrlsFromSite(String website) {
         ArrayList<String> imgUrls = new ArrayList<>();
         try{
-            Document doc = Jsoup.connect(website).get();
+            Document doc = Jsoup.connect(website).userAgent("Mozilla").get();
             Elements imageTags = doc.getElementsByTag("img");
             for (Element e:imageTags) {
-                String url = e.attr("src");
+                String url = validateURL(website,e.attr("src"));
                 if (isSupportedFormat(url))
-                imgUrls.add(e.attr("src"));
+                imgUrls.add(url);
             }
         }catch (Exception e){
-            System.err.println("Site Didn't have any images");
+            e.printStackTrace();
         }
         return  imgUrls;
     }
@@ -59,7 +62,9 @@ public class ImageDownloader {
                 try {
                     String fileDir = dest + getFileName(link);
                     final URL url = new URL(link);
-                    InputStream is = url.openStream();
+                    URLConnection connection = url.openConnection();
+                    connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
+                    InputStream is = connection.getInputStream();
                     if (!ImageDownloader.compare(fileDir, is)) {
                         OutputStream os = new FileOutputStream(fileDir, false);
 
@@ -96,5 +101,16 @@ public class ImageDownloader {
         InputStream hashedStream2 = new DigestInputStream(stream2,md2);
         return IOUtils.contentEquals(hashedStream1,hashedStream2);
 
+    }
+
+    public static String validateURL(String webUrl, String imgUrl) {
+        String formatWebUrl = (webUrl.endsWith("/"))? webUrl : webUrl + "/";
+
+        try{
+            return new URL(imgUrl).toString();
+        }catch (MalformedURLException e){
+            return formatWebUrl +
+                    ((imgUrl.startsWith("/"))? imgUrl.substring(1,imgUrl.length()):imgUrl);
+        }
     }
 }

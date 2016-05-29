@@ -52,8 +52,16 @@ public class ImageProcessor{
     private static void generateImages(File file, String smallDirPath, BufferedImage sImg) throws IOException {
         String fileName = file.getName().substring(0,file.getName().indexOf(".")+1);
 
-        ImageIO.write(sImg, ImageTypes.JPG.toString(),
-                new File(smallDirPath+fileName+ImageTypes.JPG));
+        //Ensures that we use RGB instead of RGBA on the  png to jpeg conversion
+        if (file.getName().toLowerCase().endsWith(".png")) {
+            BufferedImage jpgImage = new BufferedImage(sImg.getWidth(), sImg.getHeight(), BufferedImage.TYPE_INT_RGB);
+            jpgImage.createGraphics().drawImage(sImg,0,0,Color.white,null);
+            ImageIO.write(jpgImage, ImageTypes.JPG.toString(),
+                    new File(smallDirPath+fileName+ImageTypes.JPG));
+        }else{
+            ImageIO.write(sImg, ImageTypes.JPG.toString(),
+                    new File(smallDirPath+fileName+ImageTypes.JPG));
+        }
         ImageIO.write(sImg,ImageTypes.PNG.toString(),
                 new File(smallDirPath+fileName+ImageTypes.PNG));
         ImageIO.write(sImg,ImageTypes.GIF.toString(),

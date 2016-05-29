@@ -72,4 +72,25 @@ public class ImageDownloaderTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void validateImageUrl(){
+        String webUrl1 = "http://66.media.tumblr.com/";
+        String webUrl2 = "http://66.media.tumblr.com";
+        String webUrl3 = "https://stephenokennedy.me/";
+
+        String validImgUrl1 = "http://66.media.tumblr.com/avatar_284cfbb01f43_128.png";
+        String validImgUrl2 = "http://66.media.tumblr.com/./avatar_284cfbb01f43_128.png";
+        String validImgUrl3 = "https://stephenokennedy.me/images/Organisr-Logo.png";
+        String imageUrl1 = "http://66.media.tumblr.com/avatar_284cfbb01f43_128.png";
+        String imageUrl2 = "/avatar_284cfbb01f43_128.png";
+        String imageUrl3 = "./avatar_284cfbb01f43_128.png";
+        String imageUrl4 = "/images/Organisr-Logo.png";
+        assertEquals(validImgUrl1,ImageDownloader.validateURL(webUrl1, imageUrl1));
+        assertEquals(validImgUrl1,ImageDownloader.validateURL(webUrl1, imageUrl2));
+        assertEquals(validImgUrl1,ImageDownloader.validateURL(webUrl2, imageUrl2));
+        assertEquals(validImgUrl2,ImageDownloader.validateURL(webUrl1, imageUrl3));
+        assertEquals(validImgUrl2,ImageDownloader.validateURL(webUrl2, imageUrl3));
+        assertEquals(validImgUrl3,ImageDownloader.validateURL(webUrl3, imageUrl4));
+    }
 }
