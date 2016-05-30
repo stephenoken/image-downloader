@@ -2,8 +2,6 @@ group 'mtt.parser'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
-apply plugin:'application'
-mainClassName = build.classes.com.
 
 //sourceCompatibility = 1.5
 repositories {
