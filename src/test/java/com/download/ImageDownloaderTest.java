@@ -95,7 +95,7 @@ public class ImageDownloaderTest {
     }
 
     @Test
-    public void removeVerySmallImages(){
+    public void ignoreSmallImages(){
         try{
             File fatImage = new File("./test-images/img4.jpg");
             File thinImage = new File("./test-images/img5.jpg");
