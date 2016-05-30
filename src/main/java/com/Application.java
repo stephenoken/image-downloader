@@ -16,7 +16,7 @@ public class Application {
             System.err.println("Missing Arguments Url and directory");
         }
         final Stopwatch stopwatch = Stopwatch.createStarted();
-        ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(args[0]),args[1]);
+        ImageDownloader.downloadImages(ImageDownloader.getImgUrlsFromSite(args[0]),args[1]);
         final long elapsedMillis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
         System.out.println("CPU time " + elapsedMillis +" milliseconds.");
     }

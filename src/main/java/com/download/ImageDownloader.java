@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,45 +51,33 @@ public class ImageDownloader {
         return imgUrls;
     }
 
-    private static boolean isSupportedFormat(String url) {
-        return url.endsWith(".jpg") || url.endsWith(".JPEG") || url.endsWith(".png") || url.endsWith(".gif");
-    }
-
-    public static void downloadsImages(List<String> imgUrlsFromSite, String destination) {
-        String dest = (destination != null) ?
+    public static void downloadImages(List<String> imgUrlsFromSite, String destination) {
+        String formattedDirectoryPath = (destination != null) ?
                 (destination.endsWith("/")) ? destination : destination + "/" : "./";
-
+        new File(formattedDirectoryPath).mkdirs();
         ExecutorService executorService = Executors.newCachedThreadPool();
-        new File(dest).mkdirs();
         for (String link : imgUrlsFromSite) {
             executorService.submit(() -> {
                 try {
-                    String fileDir = dest + getFileName(link);
-                    final URL url = new URL(link);
-                    URLConnection connection = url.openConnection();
-                    connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
-                    InputStream is = connection.getInputStream();
+                    String fileDir = formattedDirectoryPath + getFileName(link);
+                    InputStream is = getImageInputStream(link);
+                    BufferedImage urlImage = ImageIO.read(is);
                     if (!ImageDownloader.doChecksumsMatch(fileDir, is)) {
-                        File f = new File(fileDir);
-                        String fileType = f.getName().substring(f.getName().lastIndexOf(".") + 1);
+                        File file = new File(fileDir);
+                        String fileExtension = getImageExtension(file);
 
-                        ImageIO.write(ImageIO.read(url), fileType, f);
-//                        OutputStream os = new FileOutputStream(fileDir,false);
-//                        byte[] b = new byte[2048];
-//                        int length;
-//                        while ((length = is.read(b)) != -1) {
-//                            os.write(b, 0, length);
-//                        }
-//                        os.flush();
-//                        os.close();
+                        ImageIO.write(urlImage, fileExtension, file);
                         ImageProcessor.generateScaledImages(new File(fileDir));
 
                     }
-
                     is.close();
-                } catch (Exception e) {
-                    System.err.println(e.toString());
+                } catch (IOException e) {
+                    System.err.println(e);
+                } catch (NoSuchAlgorithmException e) {
+                    System.err.println(e);
+                    return;
                 }
+
             });
         }
         executorService.shutdown();
@@ -118,12 +107,27 @@ public class ImageDownloader {
 
     public static String validateURL(String webUrl, String imgUrl) {
         String formatWebUrl = (webUrl.endsWith("/")) ? webUrl : webUrl + "/";
-
         try {
             return new URL(imgUrl).toString();
         } catch (MalformedURLException e) {
             return formatWebUrl +
-                    ((imgUrl.startsWith("/")) ? imgUrl.substring(1, imgUrl.length()) : imgUrl);
+                    ((imgUrl.startsWith("/")) ? imgUrl.substring(1) : imgUrl);
         }
+    }
+
+    private static boolean isSupportedFormat(String url) {
+        url = url.toLowerCase();
+        return url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif");
+    }
+
+    private static InputStream getImageInputStream(String link) throws IOException {
+        final URL url = new URL(link);
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
+        return connection.getInputStream();
+    }
+
+    private static String getImageExtension(File file) {
+        return file.getName().substring(file.getName().lastIndexOf(".") + 1);
     }
 }

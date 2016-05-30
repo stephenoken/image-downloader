@@ -37,8 +37,8 @@ public class ImageDownloaderTest {
         try {
             File f1 = new File("./test-dir/crosscountryrunning/avatar_284cfbb01f43_128.png");
             File f2 = new File("./test-dir/crosscountryrunning2/avatar_284cfbb01f43_128.png");
-            ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning");
-            ImageDownloader.downloadsImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning2/");
+            ImageDownloader.downloadImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning");
+            ImageDownloader.downloadImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning2/");
             Thread.sleep(10000);
             assertTrue(f1.exists());
             assertTrue(f2.exists());

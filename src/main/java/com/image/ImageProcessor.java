@@ -16,7 +16,7 @@ public class ImageProcessor{
     public static BufferedImage resizeImage(BufferedImage image,int width) {
 
 //        Calculates the height while maintaining aspect ratio.
-        double scaleY = (image.getHeight()/(double) image.getWidth())*width;
+        double scaleY = (image.getHeight()/ (double) image.getWidth())*width;
         int height = (int)Math.round(scaleY);
         BufferedImage scaledImage =  new BufferedImage(width,height,image.getType());
         Graphics2D g = scaledImage.createGraphics();

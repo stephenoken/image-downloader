@@ -56,14 +56,13 @@ public class ImageProcessorTest {
     @Test
     public void generateScaledImages(){
         try{
-            ImageProcessor processor = new ImageProcessor();
             File file1 = new File("./test-images/img1.jpg");
             File file2 = new File("./test-images/img2.jpg");
             File file3 = new File("./test-images/img3.jpg");
 
-            processor.generateScaledImages(file1);
-            processor.generateScaledImages(file2);
-            processor.generateScaledImages(file3);
+            ImageProcessor.generateScaledImages(file1);
+            ImageProcessor.generateScaledImages(file2);
+            ImageProcessor.generateScaledImages(file3);
 
             File smallDirectory = new File(file1.getParent()+"/small/");
             File mediumDirectory = new File(file1.getParent()+"/medium/");
