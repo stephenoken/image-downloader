@@ -2,7 +2,6 @@ package com.paser;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -31,7 +30,7 @@ public class ImageDownloaderTest {
      *
      *  The thread is put to sleep to ensure that programme can download the images
      *
-     *  This test requires an internet connection 
+     *  This test requires an internet connection
      */
     @Test
     public void downloadImages(){
@@ -61,9 +60,9 @@ public class ImageDownloaderTest {
             String file2 = "./test-images/img1.jpg";
             String file3 = "./test-images/img2.jpg";
             String file4 = "./test-images/img-doesnt-exist.png";
-            assertTrue(ImageDownloader.compare(file1,new FileInputStream(file2)));
-            assertFalse(ImageDownloader.compare(file1,new FileInputStream(file3)));
-            assertFalse(ImageDownloader.compare(file4,new FileInputStream(file3)));
+            assertTrue(ImageDownloader.doChecksumsMatch(file1,new FileInputStream(file2)));
+            assertFalse(ImageDownloader.doChecksumsMatch(file1,new FileInputStream(file3)));
+            assertFalse(ImageDownloader.doChecksumsMatch(file4,new FileInputStream(file3)));
         }catch (Exception e){
             e.printStackTrace();
         }

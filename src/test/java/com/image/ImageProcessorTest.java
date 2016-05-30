@@ -73,10 +73,14 @@ public class ImageProcessorTest {
             assertTrue(mediumDirectory.isDirectory());
             assertTrue(largeDirectory.isDirectory());
 
+
+            Thread.sleep(1000);
             imageGenerationTestCases();
 
         } catch(IOException e){
          e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
     }

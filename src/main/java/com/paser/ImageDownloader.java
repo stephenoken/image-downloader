@@ -1,13 +1,16 @@
 package com.paser;
 
 import com.image.ImageProcessor;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import sun.net.util.URLUtil;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -65,16 +68,21 @@ public class ImageDownloader {
                     URLConnection connection = url.openConnection();
                     connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.29 Safari/537.36");
                     InputStream is = connection.getInputStream();
-                    if (!ImageDownloader.compare(fileDir, is)) {
-                        OutputStream os = new FileOutputStream(fileDir, false);
+                    if (!ImageDownloader.doChecksumsMatch(fileDir, is)) {
+                        File f = new File(fileDir);
+                        String fileType = f.getName().substring(f.getName().lastIndexOf(".")+1);
 
-                        byte[] b = new byte[2048];
-                        int length;
-                        while ((length = is.read(b)) != -1) {
-                            os.write(b, 0, length);
-                        }
-                        os.close();
+                        ImageIO.write(ImageIO.read(url),fileType,f);
+//                        OutputStream os = new FileOutputStream(fileDir,false);
+//                        byte[] b = new byte[2048];
+//                        int length;
+//                        while ((length = is.read(b)) != -1) {
+//                            os.write(b, 0, length);
+//                        }
+//                        os.flush();
+//                        os.close();
                         ImageProcessor.generateScaledImages(new File(fileDir));
+
                     }
 
                     is.close();
@@ -90,7 +98,7 @@ public class ImageDownloader {
         return imgUrl.substring(imgUrl.lastIndexOf("/")+1,imgUrl.length());
     }
 
-    public static boolean compare(String file, InputStream stream2) throws IOException, NoSuchAlgorithmException{
+    public static boolean doChecksumsMatch(String file, InputStream stream2) throws IOException, NoSuchAlgorithmException{
         if (!new File(file).exists())
             return false;
         MessageDigest md1 = MessageDigest.getInstance("MD5");
@@ -99,7 +107,12 @@ public class ImageDownloader {
 
         InputStream hashedStream1 = new DigestInputStream(originalStream,md1);
         InputStream hashedStream2 = new DigestInputStream(stream2,md2);
-        return IOUtils.contentEquals(hashedStream1,hashedStream2);
+
+        Boolean result = IOUtils.contentEquals(hashedStream1,hashedStream2);
+
+        originalStream.close();
+        hashedStream1.close();
+        return result;
 
     }
 
