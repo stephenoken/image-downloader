@@ -37,8 +37,6 @@ public class ImageProcessor{
         new File(mediumDirPath).mkdirs();
         new File(largeDirPath).mkdirs();
         BufferedImage image = ImageIO.read(file);
-        if (image.getWidth() <= 10 || image.getHeight() <= 10)
-            return;
 
         BufferedImage sImg = resizeImage(image,ImageSize.SMALL.getValue());
         BufferedImage mImg = resizeImage(image,ImageSize.MEDIUM.getValue());

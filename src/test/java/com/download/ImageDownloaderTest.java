@@ -1,5 +1,6 @@
 package com.download;
 
+import com.image.ImageProcessor;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
@@ -7,6 +8,10 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -87,6 +92,33 @@ public class ImageDownloaderTest {
         assertEquals(validImgUrl2,ImageDownloader.validateURL(webUrl1, imageUrl3));
         assertEquals(validImgUrl2,ImageDownloader.validateURL(webUrl2, imageUrl3));
         assertEquals(validImgUrl3,ImageDownloader.validateURL(webUrl3, imageUrl4));
+    }
+
+    @Test
+    public void removeVerySmallImages(){
+        try{
+            File fatImage = new File("./test-images/img4.jpg");
+            File thinImage = new File("./test-images/img5.jpg");
+            File regularImage = new File("./test-images/img6.jpg");
+
+            List<String> imgUris = new ArrayList<>();
+            imgUris.add(fatImage.toURI().toURL().toString());
+            imgUris.add(thinImage.toURI().toURL().toString());
+            imgUris.add(regularImage.toURI().toURL().toString());
+
+            ImageDownloader.downloadImages(imgUris,"./test-dir");
+            Thread.sleep(3000);
+
+            assertFalse(new File("./test-dir/small/img4.jpg").exists());
+            assertFalse(new File("./test-dir/small/img5.jpg").exists());
+            assertTrue(new File("./test-dir/small/img6.jpg").exists());
+
+
+        } catch (InterruptedException e) {
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     /*

@@ -62,7 +62,7 @@ public class ImageDownloader {
                     String fileDir = formattedDirectoryPath + getFileName(link);
                     InputStream is = getImageInputStream(link);
                     BufferedImage urlImage = ImageIO.read(is);
-                    if (!ImageDownloader.doChecksumsMatch(fileDir, is)) {
+                    if (!ImageDownloader.doChecksumsMatch(fileDir, is) && imageSizeCheck(urlImage)) {
                         File file = new File(fileDir);
                         String fileExtension = getImageExtension(file);
 
@@ -129,5 +129,9 @@ public class ImageDownloader {
 
     private static String getImageExtension(File file) {
         return file.getName().substring(file.getName().lastIndexOf(".") + 1);
+    }
+
+    private static boolean imageSizeCheck(BufferedImage urlImage) {
+        return urlImage.getWidth() > 10 && urlImage.getHeight() > 10;
     }
 }

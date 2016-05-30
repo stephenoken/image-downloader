@@ -104,30 +104,6 @@ public class ImageProcessorTest {
         assertTrue(new File("./test-images/large/img3.png").exists());
     }
 
-    @Test
-    public void removeVerySmallImages(){
-        try{
-            File fatImage = new File("./test-images/img4.jpg");
-            File thinImage = new File("./test-images/img5.jpg");
-            File regularImage = new File("./test-images/img6.jpg");
-
-            ImageProcessor.generateScaledImages(fatImage);
-            ImageProcessor.generateScaledImages(thinImage);
-            ImageProcessor.generateScaledImages(regularImage);
-
-            Thread.sleep(3000);
-            assertFalse(new File("./test-images/small/img4.jpg").exists());
-            assertFalse(new File("./test-images/small/img5.jpg").exists());
-            assertTrue(new File("./test-images/small/img6.jpg").exists());
-
-
-        }catch (IOException e){
-
-        } catch (InterruptedException e) {
-
-        }
-    }
-
     @After
     public void removeTestDirs(){
         try{
