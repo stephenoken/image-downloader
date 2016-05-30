@@ -1,7 +1,6 @@
-package com.paser;
+package com.download;
 
 import com.image.ImageProcessor;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,9 +8,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -36,31 +36,31 @@ public class ImageDownloader {
     */
     public static List<String> getImgUrlsFromSite(String website) {
         ArrayList<String> imgUrls = new ArrayList<>();
-        try{
+        try {
             Document doc = Jsoup.connect(website).userAgent("Mozilla").get();
             Elements imageTags = doc.getElementsByTag("img");
-            for (Element e:imageTags) {
-                String url = validateURL(website,e.attr("src"));
+            for (Element e : imageTags) {
+                String url = validateURL(website, e.attr("src"));
                 if (isSupportedFormat(url))
-                imgUrls.add(url);
+                    imgUrls.add(url);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e.toString());
         }
-        return  imgUrls;
+        return imgUrls;
     }
 
     private static boolean isSupportedFormat(String url) {
         return url.endsWith(".jpg") || url.endsWith(".JPEG") || url.endsWith(".png") || url.endsWith(".gif");
     }
 
-    public static void downloadsImages(List<String> imgUrlsFromSite, String destination){
-        String dest = (destination != null)?
-                (destination.endsWith("/"))? destination : destination + "/" : "./";
+    public static void downloadsImages(List<String> imgUrlsFromSite, String destination) {
+        String dest = (destination != null) ?
+                (destination.endsWith("/")) ? destination : destination + "/" : "./";
 
         ExecutorService executorService = Executors.newCachedThreadPool();
         new File(dest).mkdirs();
-        for (String link:imgUrlsFromSite) {
+        for (String link : imgUrlsFromSite) {
             executorService.submit(() -> {
                 try {
                     String fileDir = dest + getFileName(link);
@@ -70,9 +70,9 @@ public class ImageDownloader {
                     InputStream is = connection.getInputStream();
                     if (!ImageDownloader.doChecksumsMatch(fileDir, is)) {
                         File f = new File(fileDir);
-                        String fileType = f.getName().substring(f.getName().lastIndexOf(".")+1);
+                        String fileType = f.getName().substring(f.getName().lastIndexOf(".") + 1);
 
-                        ImageIO.write(ImageIO.read(url),fileType,f);
+                        ImageIO.write(ImageIO.read(url), fileType, f);
 //                        OutputStream os = new FileOutputStream(fileDir,false);
 //                        byte[] b = new byte[2048];
 //                        int length;
@@ -94,21 +94,21 @@ public class ImageDownloader {
         executorService.shutdown();
     }
 
-    public static String getFileName(String imgUrl){
-        return imgUrl.substring(imgUrl.lastIndexOf("/")+1,imgUrl.length());
+    public static String getFileName(String imgUrl) {
+        return imgUrl.substring(imgUrl.lastIndexOf("/") + 1, imgUrl.length());
     }
 
-    public static boolean doChecksumsMatch(String file, InputStream stream2) throws IOException, NoSuchAlgorithmException{
+    public static boolean doChecksumsMatch(String file, InputStream stream2) throws IOException, NoSuchAlgorithmException {
         if (!new File(file).exists())
             return false;
         MessageDigest md1 = MessageDigest.getInstance("MD5");
         MessageDigest md2 = MessageDigest.getInstance("MD5");
         InputStream originalStream = new FileInputStream(file);
 
-        InputStream hashedStream1 = new DigestInputStream(originalStream,md1);
-        InputStream hashedStream2 = new DigestInputStream(stream2,md2);
+        InputStream hashedStream1 = new DigestInputStream(originalStream, md1);
+        InputStream hashedStream2 = new DigestInputStream(stream2, md2);
 
-        Boolean result = IOUtils.contentEquals(hashedStream1,hashedStream2);
+        Boolean result = IOUtils.contentEquals(hashedStream1, hashedStream2);
 
         originalStream.close();
         hashedStream1.close();
@@ -117,13 +117,13 @@ public class ImageDownloader {
     }
 
     public static String validateURL(String webUrl, String imgUrl) {
-        String formatWebUrl = (webUrl.endsWith("/"))? webUrl : webUrl + "/";
+        String formatWebUrl = (webUrl.endsWith("/")) ? webUrl : webUrl + "/";
 
-        try{
+        try {
             return new URL(imgUrl).toString();
-        }catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             return formatWebUrl +
-                    ((imgUrl.startsWith("/"))? imgUrl.substring(1,imgUrl.length()):imgUrl);
+                    ((imgUrl.startsWith("/")) ? imgUrl.substring(1, imgUrl.length()) : imgUrl);
         }
     }
 }

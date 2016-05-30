@@ -1,4 +1,4 @@
-package com.paser;
+package com.download;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;

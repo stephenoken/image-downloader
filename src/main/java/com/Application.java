@@ -2,14 +2,14 @@ package com;
 
 
 import com.google.common.base.Stopwatch;
-import com.paser.ImageDownloader;
+import com.download.ImageDownloader;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by stephenokennedy on 27/05/2016.
  */
-public class Main {
+public class Application {
 
     public static void main(String[] args){
         if (args.length != 2){
