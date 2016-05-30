@@ -52,8 +52,7 @@ public class ImageDownloader {
     }
 
     public static void downloadImages(List<String> imgUrlsFromSite, String destination) {
-        String formattedDirectoryPath = (destination != null) ?
-                (destination.endsWith("/")) ? destination : destination + "/" : "./";
+        String formattedDirectoryPath = getDirectoryPath(destination);
         new File(formattedDirectoryPath).mkdirs();
         ExecutorService executorService = Executors.newCachedThreadPool();
         for (String link : imgUrlsFromSite) {
@@ -81,6 +80,11 @@ public class ImageDownloader {
             });
         }
         executorService.shutdown();
+    }
+
+    private static String getDirectoryPath(String destination) {
+        return (destination != null) ?
+                    (destination.endsWith("/")) ? destination + "originals/" : destination + "/originals/" : "./originals";
     }
 
     public static String getFileName(String imgUrl) {

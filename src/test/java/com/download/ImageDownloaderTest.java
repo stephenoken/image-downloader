@@ -38,8 +38,8 @@ public class ImageDownloaderTest {
     @Test
     public void downloadImages(){
         try {
-            File f1 = new File("./test-dir/crosscountryrunning/avatar_284cfbb01f43_128.png");
-            File f2 = new File("./test-dir/crosscountryrunning2/avatar_284cfbb01f43_128.png");
+            File f1 = new File("./test-dir/crosscountryrunning/originals/avatar_284cfbb01f43_128.png");
+            File f2 = new File("./test-dir/crosscountryrunning2/originals/avatar_284cfbb01f43_128.png");
             ImageDownloader.downloadImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning");
             ImageDownloader.downloadImages(ImageDownloader.getImgUrlsFromSite(this.samplePage),"./test-dir/crosscountryrunning2/");
             Thread.sleep(10000);

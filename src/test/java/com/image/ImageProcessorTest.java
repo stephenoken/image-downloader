@@ -56,24 +56,24 @@ public class ImageProcessorTest {
     @Test
     public void generateScaledImages(){
         try{
-            File file1 = new File("./test-images/img1.jpg");
-            File file2 = new File("./test-images/img2.jpg");
-            File file3 = new File("./test-images/img3.jpg");
+            File file1 = new File("./test-images/originals/img1.jpg");
+            File file2 = new File("./test-images/originals/img2.jpg");
+            File file3 = new File("./test-images/originals/img3.jpg");
 
             ImageProcessor.generateScaledImages(file1);
             ImageProcessor.generateScaledImages(file2);
             ImageProcessor.generateScaledImages(file3);
 
-            File smallDirectory = new File(file1.getParent()+"/small/");
-            File mediumDirectory = new File(file1.getParent()+"/medium/");
-            File largeDirectory = new File(file1.getParent()+"/large/");
+            File smallDirectory = new File(file1.getParent()+"/../small/");
+            File mediumDirectory = new File(file1.getParent()+"/../medium/");
+            File largeDirectory = new File(file1.getParent()+"/../large/");
 
             assertTrue(smallDirectory.isDirectory());
             assertTrue(mediumDirectory.isDirectory());
             assertTrue(largeDirectory.isDirectory());
 
-
             Thread.sleep(1000);
+
             imageGenerationTestCases();
 
         } catch(IOException e){

@@ -29,9 +29,9 @@ public class ImageProcessor{
     }
 
     public static void generateScaledImages(File file) throws IOException{
-        String smallDirPath = file.getParent()+"/small/";
-        String mediumDirPath = file.getParent()+"/medium/";
-        String largeDirPath = file.getParent()+"/large/";
+        String smallDirPath = file.getParent()+"/../small/";
+        String mediumDirPath = file.getParent()+"/../medium/";
+        String largeDirPath = file.getParent()+"/../large/";
 
         new File(smallDirPath).mkdirs();
         new File(mediumDirPath).mkdirs();
