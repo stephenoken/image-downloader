@@ -14,6 +14,7 @@ public class Application {
     public static void main(String[] args){
         if (args.length != 2){
             System.err.println("Missing Arguments Url and directory");
+            return;
         }
         final Stopwatch stopwatch = Stopwatch.createStarted();
         ImageDownloader.downloadImages(ImageDownloader.getImgUrlsFromSite(args[0]),args[1]);
