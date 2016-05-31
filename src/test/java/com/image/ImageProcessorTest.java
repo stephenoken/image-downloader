@@ -22,9 +22,9 @@ public class ImageProcessorTest {
     public void resizeImage(){
         ImageProcessor processor = new ImageProcessor();
         try {
-            BufferedImage img1 = ImageIO.read(new File("./test-images/img1.jpg"));
-            BufferedImage img2 = ImageIO.read(new File("./test-images/img2.jpg"));
-            BufferedImage img3 = ImageIO.read(new File("./test-images/img3.jpg"));
+            BufferedImage img1 = ImageIO.read(new File("./test-images/originals/img1.jpg"));
+            BufferedImage img2 = ImageIO.read(new File("./test-images/originals/img2.jpg"));
+            BufferedImage img3 = ImageIO.read(new File("./test-images/originals/img3.jpg"));
 
             Dimension img1Small = new Dimension(100,66);
             Dimension img1Medium = new Dimension(220,146);

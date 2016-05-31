@@ -59,9 +59,9 @@ public class ImageDownloaderTest {
     @Test
     public void areImagesTheSame(){
         try{
-            String file1 = "./test-images/img1.jpg";
-            String file2 = "./test-images/img1.jpg";
-            String file3 = "./test-images/img2.jpg";
+            String file1 = "./test-images/originals/img1.jpg";
+            String file2 = "./test-images/originals/img1.jpg";
+            String file3 = "./test-images/originals/img2.jpg";
             String file4 = "./test-images/img-doesnt-exist.png";
             assertTrue(ImageDownloader.doChecksumsMatch(file1,new FileInputStream(file2)));
             assertFalse(ImageDownloader.doChecksumsMatch(file1,new FileInputStream(file3)));
